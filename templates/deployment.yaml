@@ -1,0 +1,21 @@
+kind: Deployment
+metadata:
+  name: {{ include "express-sqlite-charts.fullname" . }}
+  labels:
+    {{- include "express-sqlite-charts.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "express-sqlite-charts.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "express-sqlite-charts.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 3000 # Port for Express.js application
